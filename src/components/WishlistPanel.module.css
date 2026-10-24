@@ -84,9 +84,12 @@
   height: 1.1rem;
 }
 
-.list {
+.scrollArea {
   flex: 1;
   overflow-y: auto;
+}
+
+.list {
   list-style: none;
   margin: 0;
   padding: 0 1.5rem;

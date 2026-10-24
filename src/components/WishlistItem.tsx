@@ -12,6 +12,24 @@ interface WishlistItemProps {
   onRemove: (productId: string) => void
 }
 
+/**
+ * One row inside the wishlist panel: thumbnail, name, unit price, a quantity
+ * stepper, the line total, and a remove button.
+ *
+ * Presentational and stateless — quantity and the mutation callbacks come from
+ * the panel, which owns the store wiring. The line total is derived on each
+ * render from price × quantity rather than stored.
+ *
+ * Accessibility notes:
+ * - The stepper is a labelled `role="group"` ("Quantity for <name>") so the
+ *   two buttons read as a unit tied to the product.
+ * - At quantity 1 the decrement button's accessible name explicitly says it
+ *   will remove the item, so it never collides with the dedicated remove
+ *   button (two controls, distinct names, distinct outcomes).
+ * - Visually-hidden ("srOnly") prefixes give the quantity value and the line
+ *   total meaningful context for screen readers; the live region announces
+ *   quantity changes politely.
+ */
 export function WishlistItem({
   product,
   quantity,
@@ -19,7 +37,9 @@ export function WishlistItem({
   onDecrement,
   onRemove,
 }: WishlistItemProps) {
+  // Derived per render — never persisted as a mutable total.
   const lineTotal = product.price * quantity
+  // At one, decrementing removes the item; say so in the accessible name.
   const decrementLabel =
     quantity === 1
       ? `Decrease quantity of ${product.name}, removing it from your wishlist`

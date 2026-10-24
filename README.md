@@ -20,6 +20,9 @@ not in the controls.
 
 ## Setup
 
+Node 26 is recommended (see `.nvmrc`; `nvm use` picks it up). CI reads the same `.nvmrc`,
+so local and CI run on the same version.
+
 ```bash
 npm install
 npm run dev
@@ -45,10 +48,11 @@ npm run dev
 src/
   data/        # products.json catalogue + typed accessor (single source of truth)
   types/       # Product and WishlistEntry types
-  lib/         # formatting, persisted-data validation, focus-trap hook
+  lib/         # formatting, persisted-data validation, focus-trap,
+               #   safe storage, taste-report scoring
   stores/      # Zustand wishlist + description-mode stores
   components/  # Header, ModeToggle, ProductListing, ProductCard, ProductImage,
-               #   WishlistPanel, WishlistItem
+               #   WishlistPanel, WishlistItem, TasteReport
 ```
 
 - **Catalogue as source of truth.** Products live in `src/data/products.json` and are
@@ -61,6 +65,14 @@ src/
   `ProductImage` renders a neutral, accessible fallback tile if an image fails to load.
 - **Responsive grid** in `ProductListing` scales from one column on mobile up to four on
   wide desktops.
+
+**Why these choices.** This is a small, self-contained front-end assignment with no
+backend, auth, or real inventory, so local JSON is the right weight for the catalogue and
+`localStorage` is the right weight for persistence — they keep the app fully functional and
+reviewable with zero infrastructure. Zustand (rather than Redux or Context gymnastics)
+gives a tiny, typed store with built-in `persist`, which is proportionate to two pieces of
+shared state (wishlist + description mode). Anything heavier would be architecture for its
+own sake.
 
 ## Wishlist state and persistence
 
@@ -139,6 +151,29 @@ already own three.").
   description reserves ~3 lines of height so differing copy lengths don't make the grid
   jump. Transitions respect `prefers-reduced-motion`.
 
+## Your Questionable Taste Report
+
+Inside the wishlist panel, the storefront generates a dry, editorial "Questionable Taste
+Report" that judges the current selection.
+
+- **Pure, deterministic scoring.** All logic lives in `src/lib/taste-report.ts`, separate
+  from presentation. `generateReport(items)` derives the financial commitment (accounting
+  for quantities), the most expensive "most questionable decision", a shopping personality,
+  and a closing verdict. The same wishlist always yields the same report — no randomness,
+  nothing persisted.
+- **Explicit personality rules.** `selectPersonality` applies a short, ordered rule set
+  (productivity-heavy → _Aspiring Executive_; few but pricey comfort items → _Luxury
+  Minimalist_; many varied categories → _Indecisive Collector_) with an unconditional
+  fallback (_Reluctantly Responsible Adult_), so every non-empty wishlist resolves to a
+  valid profile. The "most questionable" quip reuses the product's own honest description.
+- **Synced to state.** The report reads the same resolved wishlist items the panel renders,
+  so it updates on add, remove, and quantity change, survives a reload with the wishlist,
+  and returns to no-report when the last item is removed (the panel's empty state shows).
+- **Accessible + on-brand.** Rendered as a labelled `<section>` with a semantic heading and
+  a `<dl>` of figures, restrained editorial styling, and a subtle disclaimer ("Not
+  financial advice. Barely advice at all."). Profile/verdict differences are conveyed in
+  text, not colour.
+
 ## Design system
 
 Design tokens live in `src/index.css` (`:root`): a warm off-white palette with a single
@@ -167,29 +202,59 @@ system stays consistent.
 
 ## Testing
 
-- **Unit + component (Vitest + RTL):** 75 tests across 12 files, using accessible queries
+- **Unit + component (Vitest + RTL):** 92 tests across 14 files, using accessible queries
   and asserting observable behaviour rather than implementation details. Coverage spans
   the catalogue and price formatting, the store (add, duplicate-add no-op, remove,
   increment/decrement, decrement-at-one, derived totals, stale IDs), persisted-data
   sanitization (malformed JSON, bad shapes, invalid quantities), header count and selected
   button state, panel open/close including Escape, the empty state, quantity/remove
-  controls, graceful behaviour when `localStorage` throws, and the Honesty Toggle (default
+  controls, graceful behaviour when `localStorage` throws, the Honesty Toggle (default
   mode, switching updates all descriptions, switching back, wishlist/price/image untouched,
-  persistence, and invalid-stored-value fallback).
+  persistence, and invalid-stored-value fallback), and the Taste Report (empty / single /
+  multiple wishlists, quantity-aware totals, personality rules and fallback, determinism,
+  and live updates on add/remove/quantity change).
 - **End-to-end (Playwright, Chromium):** one flow that jsdom can only approximate — add an
   item, open the panel, raise the quantity, **reload the real page**, and verify the item
   and quantity persist. Run with `npm run e2e`; it builds and serves the preview
   automatically. Kept intentionally minimal and separate from the default `npm run test`.
 
+## Continuous integration
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request targeting `main`
+and every push to `main`. It reads the Node version from `.nvmrc` (Node 26, matching local
+development), installs reproducibly with `npm ci` from `package-lock.json`, and then runs
+the same scripts you run locally:
+
+```bash
+npm ci            # reproducible install from the lockfile
+npm run lint      # ESLint
+npm run format:check
+npm run type-check # tsc -b --noEmit
+npm run test      # Vitest (unit + component)
+npm run build     # tsc -b + production build
+```
+
+Any failed step fails the workflow — no commands mask their exit code. The Playwright
+`e2e` flow is intentionally **not** part of this gate (it needs a browser download); run it
+locally with `npm run e2e`.
+
+A pull request template lives at `.github/pull_request_template.md`.
+
+**Manual GitHub setup (cannot be configured from the repo):** to enforce the gate, add the
+CI job as a required status check under the branch protection rules for `main` in the
+repository settings.
+
 ## Status / limitations
 
-All seven tasks are complete: project tooling (01); brand, catalogue, and responsive
+All nine tasks are complete: project tooling (01); brand, catalogue, and responsive
 product listing (02); the wishlist state store with persistence (03); the header wishlist
 control/badge plus the accessible side panel (04); the premium design system, responsive
-polish, and accessibility pass (05); the testing, quality, and resilience pass (06); and
-the Honesty Toggle feature (07). The full experience — browse, toggle between marketing and
-honest copy, wishlist items, adjust quantities in the panel, and have both the wishlist and
-the selected mode persist across a real reload — works end to end and is covered by tests.
+polish, and accessibility pass (05); the testing, quality, and resilience pass (06); the
+Honesty Toggle feature (07); the Questionable Taste Report (08); and the CI engineering
+quality gate (09). The full experience — browse, toggle between marketing and honest copy,
+wishlist items, adjust quantities in the panel, read the generated taste report, and have
+both the wishlist and the selected mode persist across a real reload — works end to end and
+is covered by tests.
 
 This is an interview assignment and is not production-hardened. Notably, product imagery
 depends on an external CDN (`images.unsplash.com`) and would be self-hosted and optimized

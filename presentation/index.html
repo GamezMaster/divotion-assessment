@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bare Minimum™ — Project Walkthrough</title>
+    <style>
+      :root {
+        --bg: #f6f4ef;
+        --surface: #ffffff;
+        --surface-muted: #eceae3;
+        --ink: #1a1a18;
+        --muted: #6b6a63;
+        --border: #e2dfd7;
+        --accent: #b4532a;
+        --sans:
+          'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+
+      body {
+        font-family: var(--sans);
+        background: var(--ink);
+        color: var(--ink);
+        overflow: hidden;
+      }
+
+      /* ---- Slide deck ---- */
+      .deck {
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(2rem, 6vw, 6rem);
+        background: var(--bg);
+        animation: fade 0.35s ease;
+        overflow-y: auto;
+      }
+
+      .slide.active {
+        display: flex;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .slide {
+          animation: none;
+        }
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+        font-weight: 700;
+        color: var(--accent);
+        margin: 0 0 1rem;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 6vw, 4.5rem);
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+        margin: 0 0 1.25rem;
+        font-weight: 800;
+      }
+
+      h1 sup {
+        font-size: 0.35em;
+        top: -1.3em;
+        font-weight: 600;
+      }
+
+      h2 {
+        font-size: clamp(1.7rem, 3.6vw, 2.8rem);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 1.5rem;
+        font-weight: 700;
+      }
+
+      .lead {
+        font-size: clamp(1.1rem, 2vw, 1.5rem);
+        line-height: 1.5;
+        color: var(--muted);
+        max-width: 48ch;
+        margin: 0 0 0.5rem;
+      }
+
+      .tagline {
+        font-size: clamp(1rem, 1.8vw, 1.35rem);
+        font-style: italic;
+        color: var(--muted);
+        margin: 0.5rem 0 0;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.25rem;
+        margin-top: 1rem;
+        max-width: 1100px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem;
+      }
+
+      .card .icon {
+        font-size: 1.6rem;
+        line-height: 1;
+        display: block;
+        margin-bottom: 0.75rem;
+      }
+
+      .card h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.15rem;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 0.98rem;
+      }
+
+      ul.points {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        max-width: 60ch;
+        display: grid;
+        gap: 1rem;
+      }
+
+      ul.points li {
+        font-size: clamp(1rem, 1.7vw, 1.25rem);
+        line-height: 1.45;
+        padding-left: 1.75rem;
+        position: relative;
+        color: var(--ink);
+      }
+
+      ul.points li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.55em;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      ul.points li span {
+        color: var(--muted);
+        display: block;
+        font-size: 0.9em;
+        margin-top: 0.15rem;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        max-width: 1000px;
+        margin-top: 0.5rem;
+      }
+
+      @media (max-width: 760px) {
+        .split {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem;
+      }
+
+      .panel.muted {
+        background: var(--surface-muted);
+      }
+
+      .panel .label {
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--muted);
+        margin: 0 0 0.6rem;
+      }
+
+      .panel .quote {
+        font-size: 1.1rem;
+        line-height: 1.45;
+        margin: 0;
+      }
+
+      .big-number {
+        font-size: clamp(2.5rem, 7vw, 5rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--accent);
+        line-height: 1;
+      }
+
+      .stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2.5rem;
+        margin-top: 1rem;
+      }
+
+      .stat .big-number {
+        display: block;
+      }
+
+      .stat p {
+        margin: 0.4rem 0 0;
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .wordmark {
+        font-weight: 800;
+        letter-spacing: 0.06em;
+      }
+
+      .disclaimer {
+        margin-top: 2rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+        font-style: italic;
+      }
+
+      /* ---- Chrome: progress + controls ---- */
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: var(--accent);
+        transition: width 0.3s ease;
+        z-index: 10;
+      }
+
+      .controls {
+        position: fixed;
+        bottom: 1.25rem;
+        right: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        z-index: 10;
+      }
+
+      .controls button {
+        font: inherit;
+        font-size: 0.95rem;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 999px;
+        width: 2.75rem;
+        height: 2.75rem;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+
+      .controls button:hover {
+        background: var(--surface-muted);
+      }
+
+      .controls button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .counter {
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+        font-size: 0.9rem;
+        min-width: 3.5rem;
+        text-align: center;
+      }
+
+      .hint {
+        position: fixed;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        font-size: 0.8rem;
+        color: var(--muted);
+        z-index: 10;
+      }
+
+      kbd {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0.1rem 0.4rem;
+        font-size: 0.75rem;
+        font-family: var(--sans);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+
+    <main class="deck" id="deck">
+      <!-- 1. Title -->
+      <section class="slide active">
+        <p class="eyebrow">A fictional webshop · Project walkthrough</p>
+        <h1>BARE MINIMUM<sup>™</sup></h1>
+        <p class="lead">
+          A polished online shop that sells ordinary products with extraordinary
+          confidence — then quietly admits the truth.
+        </p>
+        <p class="tagline">"Unreasonably average. Surprisingly expensive."</p>
+      </section>
+
+      <!-- 2. The idea -->
+      <section class="slide">
+        <p class="eyebrow">The big idea</p>
+        <h2>A premium shop with a sense of humour</h2>
+        <div class="split">
+          <div class="panel muted">
+            <p class="label">What it looks like</p>
+            <p class="quote">
+              A calm, high-end lifestyle store. Clean typography, generous
+              space, strong product photography.
+            </p>
+          </div>
+          <div class="panel">
+            <p class="label">What it secretly says</p>
+            <p class="quote">
+              The product descriptions gently roast the customer, the products,
+              and modern marketing — without ever getting in the way.
+            </p>
+          </div>
+        </div>
+        <p class="lead" style="margin-top: 1.5rem">
+          The contrast is the brand: it looks like a shop you'd trust, and reads
+          like a friend who's a little too honest.
+        </p>
+      </section>
+
+      <!-- 3. Core shopping experience -->
+      <section class="slide">
+        <p class="eyebrow">What customers can do</p>
+        <h2>The shopping experience</h2>
+        <div class="cards">
+          <div class="card">
+            <span class="icon">🛍️</span>
+            <h3>Browse products</h3>
+            <p>
+              A responsive grid of twelve products, each with a photo, price,
+              and description.
+            </p>
+          </div>
+          <div class="card">
+            <span class="icon">❤️</span>
+            <h3>Save favourites</h3>
+            <p>
+              Add anything to a wishlist with one click. The heart fills in so
+              it's obvious what's saved.
+            </p>
+          </div>
+          <div class="card">
+            <span class="icon">🔢</span>
+            <h3>Adjust quantities</h3>
+            <p>
+              Change how many of each item you want. Totals update instantly.
+            </p>
+          </div>
+          <div class="card">
+            <span class="icon">💾</span>
+            <h3>It remembers you</h3>
+            <p>
+              Close the tab and come back later — your wishlist is still there.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. The wishlist panel -->
+      <section class="slide">
+        <p class="eyebrow">Feature · The wishlist</p>
+        <h2>"Your questionable taste"</h2>
+        <ul class="points">
+          <li>
+            Slides in over the shop as a side panel
+            <span>You never lose your place while reviewing your picks.</span>
+          </li>
+          <li>
+            Shows each item with its photo, price, quantity, and a running total
+            <span>Clear at a glance — the important numbers stand out.</span>
+          </li>
+          <li>
+            A considered empty state
+            <span
+              >"Nothing here. A rare moment of financial responsibility."</span
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- 5. Honesty Toggle -->
+      <section class="slide">
+        <p class="eyebrow">Signature feature · The Honesty Toggle</p>
+        <h2>Two ways to read every product</h2>
+        <div class="split">
+          <div class="panel">
+            <p class="label">Marketing Mode</p>
+            <p class="quote">
+              "A thoughtfully engineered ceramic vessel designed to elevate your
+              daily coffee ritual."
+            </p>
+          </div>
+          <div class="panel muted">
+            <p class="label">Honesty Mode</p>
+            <p class="quote">"It's a mug. You already own three."</p>
+          </div>
+        </div>
+        <p class="lead" style="margin-top: 1.5rem">
+          One switch flips every product between polished sales copy and the
+          blunt truth. It's the brand's personality made interactive.
+        </p>
+      </section>
+
+      <!-- 6. Taste Report -->
+      <section class="slide">
+        <p class="eyebrow">Signature feature · The Taste Report</p>
+        <h2>It judges your choices</h2>
+        <div class="panel muted" style="max-width: 760px">
+          <p class="label">Your Questionable Taste Report</p>
+          <p class="quote" style="margin-bottom: 1rem">
+            <strong>Shopping personality:</strong> The Aspiring Executive — "You
+            have the wishlist of someone who schedules meetings about scheduling
+            meetings."
+          </p>
+          <p class="quote">
+            <strong>Final verdict:</strong> "Your taste is expensive. Your
+            commitment to buying things remains theoretical."
+          </p>
+        </div>
+        <p class="lead" style="margin-top: 1.5rem">
+          A playful, personalised summary of the wishlist — a shopping
+          personality, the "most questionable decision", and a verdict. It
+          updates live as the wishlist changes.
+        </p>
+      </section>
+
+      <!-- 7. Design & accessibility -->
+      <section class="slide">
+        <p class="eyebrow">Design &amp; inclusivity</p>
+        <h2>Built to feel premium — and to work for everyone</h2>
+        <div class="cards">
+          <div class="card">
+            <span class="icon">📱</span>
+            <h3>Works on any screen</h3>
+            <p>Phone, tablet, or desktop — the layout adapts cleanly.</p>
+          </div>
+          <div class="card">
+            <span class="icon">⌨️</span>
+            <h3>Keyboard friendly</h3>
+            <p>
+              Every action works without a mouse, for people who navigate that
+              way.
+            </p>
+          </div>
+          <div class="card">
+            <span class="icon">🔎</span>
+            <h3>Screen-reader ready</h3>
+            <p>
+              Buttons and counts are announced properly for visually impaired
+              users.
+            </p>
+          </div>
+          <div class="card">
+            <span class="icon">🌙</span>
+            <h3>Respects preferences</h3>
+            <p>Honours reduced-motion settings and keeps text easy to read.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Choices we made (plain language) -->
+      <section class="slide">
+        <p class="eyebrow">The choices we made</p>
+        <h2>Built right-sized, not over-built</h2>
+        <ul class="points">
+          <li>
+            We kept the toolkit lean
+            <span
+              >We used small, well-matched tools rather than heavy machinery the
+              project doesn't need — faster to build, cheaper to maintain.</span
+            >
+          </li>
+          <li>
+            The wishlist is robust
+            <span
+              >Even if saved data is corrupted or your browser blocks storage,
+              the shop keeps working instead of breaking.</span
+            >
+          </li>
+          <li>
+            Nothing is faked or hardcoded
+            <span
+              >Every price, total, and report figure is calculated from the real
+              product data, so it's always consistent.</span
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- 9. Quality / confidence -->
+      <section class="slide">
+        <p class="eyebrow">Confidence &amp; quality</p>
+        <h2>Changes ship with a safety net</h2>
+        <div class="stat-row">
+          <div class="stat">
+            <span class="big-number">92</span>
+            <p>Automated tests checking the shop behaves correctly</p>
+          </div>
+          <div class="stat">
+            <span class="big-number">1</span>
+            <p>Full "real browser" test of the save-and-return journey</p>
+          </div>
+          <div class="stat">
+            <span class="big-number">✓</span>
+            <p>Automatic checks run on every change before it's accepted</p>
+          </div>
+        </div>
+        <p class="lead" style="margin-top: 1.75rem">
+          This means new features and fixes can be added with confidence — the
+          system catches mistakes before they reach customers.
+        </p>
+      </section>
+
+      <!-- 10. Honest limitations -->
+      <section class="slide">
+        <p class="eyebrow">Being straight with you</p>
+        <h2>What this is — and isn't (yet)</h2>
+        <ul class="points">
+          <li>
+            It's a complete, polished demo of the shopping experience
+            <span
+              >Browsing, wishlist, quantities, and the two signature features
+              all work end to end.</span
+            >
+          </li>
+          <li>
+            Product photos currently come from a free image library
+            <span
+              >A real shop would host and optimise its own product
+              imagery.</span
+            >
+          </li>
+          <li>
+            There's no checkout or payment
+            <span
+              >It's a front-end experience; connecting real inventory and
+              payments would be the next step.</span
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- 11. Close -->
+      <section class="slide">
+        <p class="eyebrow">Thank you</p>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.5rem)">
+          A shop that sells nothing special —
+          <br />beautifully.
+        </h1>
+        <p class="lead">
+          <span class="wordmark">BARE MINIMUM™</span> — ordinary products,
+          extraordinary confidence, and a wishlist that judges you.
+        </p>
+        <p class="disclaimer">Not financial advice. Barely advice at all.</p>
+      </section>
+    </main>
+
+    <div class="hint">
+      <kbd>←</kbd> <kbd>→</kbd> to navigate · <kbd>F</kbd> for fullscreen
+    </div>
+
+    <div class="controls">
+      <button id="prev" aria-label="Previous slide">&#8592;</button>
+      <span class="counter" id="counter">1 / 11</span>
+      <button id="next" aria-label="Next slide">&#8594;</button>
+    </div>
+
+    <script>
+      // Minimal, dependency-free slide deck. All slides exist in the DOM at
+      // once; only the one with the `active` class is shown (see the CSS).
+      const slides = Array.from(document.querySelectorAll('.slide'))
+      const progress = document.getElementById('progress') // top progress bar
+      const counter = document.getElementById('counter') // "N / total" label
+      let index = 0 // index of the currently visible slide
+
+      /**
+       * Show the slide at position `i`.
+       *
+       * The index is clamped to the valid range so navigating past either end
+       * is a no-op rather than an error. Besides swapping the `active` class,
+       * it keeps the progress bar width and the counter label in sync with the
+       * current position.
+       */
+      function show(i) {
+        index = Math.max(0, Math.min(slides.length - 1, i))
+        slides.forEach((s, n) => s.classList.toggle('active', n === index))
+        progress.style.width = ((index + 1) / slides.length) * 100 + '%'
+        counter.textContent = index + 1 + ' / ' + slides.length
+      }
+
+      // On-screen next/previous buttons.
+      document
+        .getElementById('next')
+        .addEventListener('click', () => show(index + 1))
+      document
+        .getElementById('prev')
+        .addEventListener('click', () => show(index - 1))
+
+      /**
+       * Keyboard navigation for presenting:
+       * - Right / PageDown / Space advance; Left / PageUp go back
+       *   (preventDefault stops Space/PageKeys from also scrolling the page).
+       * - Home / End jump to the first / last slide.
+       * - "F" toggles fullscreen (optional chaining guards browsers that
+       *   don't expose the Fullscreen API).
+       */
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault()
+          show(index + 1)
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault()
+          show(index - 1)
+        } else if (e.key === 'Home') {
+          show(0)
+        } else if (e.key === 'End') {
+          show(slides.length - 1)
+        } else if (e.key.toLowerCase() === 'f') {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen?.()
+          } else {
+            document.exitFullscreen?.()
+          }
+        }
+      })
+
+      /**
+       * Touch/click navigation: tapping the right half of the deck advances,
+       * the left half goes back. Clicks on the control bar are ignored so its
+       * buttons keep their own behaviour.
+       */
+      document.getElementById('deck').addEventListener('click', (e) => {
+        if (e.target.closest('.controls')) return
+        const mid = window.innerWidth / 2
+        show(e.clientX > mid ? index + 1 : index - 1)
+      })
+
+      // Render the first slide on load.
+      show(0)
+    </script>
+  </body>
+</html>

@@ -10,11 +10,26 @@ interface HeaderProps {
   triggerRef?: React.Ref<HTMLButtonElement>
 }
 
+/**
+ * The sticky site header: the Bare Minimum™ wordmark, the tagline, and the
+ * wishlist trigger with its unit-count badge.
+ *
+ * Presentational and stateless — the count and the open handler are supplied
+ * by the parent. The `triggerRef` is forwarded onto the trigger button so the
+ * wishlist panel can restore focus here when it closes (part of the panel's
+ * open/close focus-management contract).
+ *
+ * Accessibility: the numeric badge is decorative (`aria-hidden`); the real
+ * count lives in the trigger's accessible name ("Open wishlist, N items"), so
+ * the figure is never conveyed by the badge alone. The count is pluralised so
+ * it reads naturally for one vs. many.
+ */
 export function Header({
   wishlistCount,
   onOpenWishlist,
   triggerRef,
 }: HeaderProps) {
+  // Pluralise so the accessible name reads "1 item" but "3 items".
   const itemWord = wishlistCount === 1 ? 'item' : 'items'
   const triggerLabel = `Open wishlist, ${wishlistCount} ${itemWord}`
 

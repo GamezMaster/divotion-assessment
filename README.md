@@ -222,21 +222,26 @@ system stays consistent.
 
 GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request targeting `main`
 and every push to `main`. It reads the Node version from `.nvmrc` (Node 26, matching local
-development), installs reproducibly with `npm ci` from `package-lock.json`, and then runs
-the same scripts you run locally:
+development) and installs reproducibly with `npm ci` from `package-lock.json`. Two jobs
+run in parallel:
 
-```bash
-npm ci            # reproducible install from the lockfile
-npm run lint      # ESLint
-npm run format:check
-npm run type-check # tsc -b --noEmit
-npm run test      # Vitest (unit + component)
-npm run build     # tsc -b + production build
-```
+- **`verify`** runs the same fast checks you run locally:
 
-Any failed step fails the workflow — no commands mask their exit code. The Playwright
-`e2e` flow is intentionally **not** part of this gate (it needs a browser download); run it
-locally with `npm run e2e`.
+  ```bash
+  npm ci            # reproducible install from the lockfile
+  npm run lint      # ESLint
+  npm run format:check
+  npm run type-check # tsc -b --noEmit
+  npm run test      # Vitest (unit + component)
+  npm run build     # tsc -b + production build
+  ```
+
+- **`e2e`** installs the Chromium browser and runs the Playwright flow
+  (`npm run e2e`), uploading the Playwright report as an artifact if it fails.
+
+Any failed step fails the workflow — no commands mask their exit code. The two jobs are
+split so a browser-download issue in the end-to-end run can't block the fast checks, and
+vice versa.
 
 A pull request template lives at `.github/pull_request_template.md`.
 
@@ -246,16 +251,14 @@ repository settings.
 
 ## Status / limitations
 
-All nine tasks are complete: project tooling (01); brand, catalogue, and responsive
-product listing (02); the wishlist state store with persistence (03); the header wishlist
-control/badge plus the accessible side panel (04); the premium design system, responsive
-polish, and accessibility pass (05); the testing, quality, and resilience pass (06); the
-Honesty Toggle feature (07); the Questionable Taste Report (08); and the CI engineering
-quality gate (09). The full experience — browse, toggle between marketing and honest copy,
-wishlist items, adjust quantities in the panel, read the generated taste report, and have
-both the wishlist and the selected mode persist across a real reload — works end to end and
-is covered by tests.
+The full experience works end to end and is covered by tests: browse the catalogue, toggle
+between marketing and honest copy, wishlist items, adjust quantities in the side panel,
+read the generated taste report, and have both the wishlist and the selected mode persist
+across a real page reload.
 
-This is an interview assignment and is not production-hardened. Notably, product imagery
-depends on an external CDN (`images.unsplash.com`) and would be self-hosted and optimized
-in production.
+This is an interview assignment and is not production-hardened. Known limitations:
+
+- **Imagery** comes from an external CDN (`images.unsplash.com`); a production shop would
+  self-host and optimize its own product images.
+- **No checkout or backend** — this is a front-end experience. Real inventory, payments,
+  and user accounts would be the next step.

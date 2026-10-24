@@ -1,0 +1,156 @@
+.item {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.thumb {
+  width: 84px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--color-surface-muted);
+}
+
+.thumb :global(img),
+.thumb > * {
+  aspect-ratio: 1 / 1;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.name {
+  margin: 0;
+  font-size: 0.9875rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.unitPrice {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.remove {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.remove:hover {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.remove:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+.removeIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.quantity {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.qtyButton {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.qtyButton:hover {
+  background: var(--color-surface-muted);
+}
+
+.qtyButton:focus-visible {
+  outline: var(--focus-ring);
+  /* Inset: the button sits inside a bordered group. */
+  outline-offset: -2px;
+}
+
+.qtyIcon {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.qtyValue {
+  min-width: 2rem;
+  text-align: center;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.lineTotal {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .remove,
+  .qtyButton {
+    transition: none;
+  }
+}

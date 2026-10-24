@@ -1,0 +1,146 @@
+[
+  {
+    "id": "everyday-mug",
+    "name": "The Everyday Mug",
+    "description": {
+      "marketing": "A thoughtfully engineered ceramic vessel designed to elevate your daily coffee ritual.",
+      "honest": "It's a mug. You already own three."
+    },
+    "price": 16.95,
+    "category": "Kitchen",
+    "image": "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=800&q=80",
+    "alt": "A plain ceramic mug on a neutral background"
+  },
+  {
+    "id": "premium-water-bottle",
+    "name": "Premium Water Bottle",
+    "description": {
+      "marketing": "Precision-crafted hydration architecture for the modern, forward-thinking individual.",
+      "honest": "It holds water. Revolutionary, we know."
+    },
+    "price": 39.95,
+    "category": "Hydration",
+    "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=800&q=80",
+    "alt": "A stainless steel insulated water bottle standing upright"
+  },
+  {
+    "id": "smart-water-bottle",
+    "name": "Smart Water Bottle",
+    "description": {
+      "marketing": "An intelligent hydration companion that syncs your wellness journey to the cloud.",
+      "honest": "Because apparently drinking water was too complicated."
+    },
+    "price": 59.95,
+    "category": "Hydration",
+    "image": "https://images.unsplash.com/photo-1625708458528-802ec79b1ed8?auto=format&fit=crop&w=800&q=80",
+    "alt": "A modern reusable water bottle with a minimalist cap"
+  },
+  {
+    "id": "motivational-poster",
+    "name": "Motivational Poster",
+    "description": {
+      "marketing": "Gallery-grade wall art curated to inspire your boldest ambitions, every single day.",
+      "honest": "Believe in yourself. Someone has to."
+    },
+    "price": 24.95,
+    "category": "Decor",
+    "image": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+    "alt": "A framed minimalist poster hanging on a light wall"
+  },
+  {
+    "id": "productivity-planner",
+    "name": "Productivity Planner",
+    "description": {
+      "marketing": "Unlock your full potential with our premium, intention-driven productivity system.",
+      "honest": "For organizing all the things you won't do."
+    },
+    "price": 19.95,
+    "category": "Stationery",
+    "image": "https://images.unsplash.com/photo-1506784365847-bbad939e9335?auto=format&fit=crop&w=800&q=80",
+    "alt": "An open daily planner with a pen resting on the page"
+  },
+  {
+    "id": "luxury-notebook",
+    "name": "Luxury Notebook",
+    "description": {
+      "marketing": "A refined companion for visionaries, bound to hold your most brilliant ideas.",
+      "honest": "For your million-dollar ideas. And grocery lists."
+    },
+    "price": 29.95,
+    "category": "Stationery",
+    "image": "https://images.unsplash.com/photo-1531346878377-a5be20888e57?auto=format&fit=crop&w=800&q=80",
+    "alt": "A hardcover notebook with an elastic closure band"
+  },
+  {
+    "id": "self-help-journal",
+    "name": "Self-Help Journal",
+    "description": {
+      "marketing": "A transformative guided journal to help you become your most authentic self.",
+      "honest": "Write down your problems. Now they're organized."
+    },
+    "price": 22.95,
+    "category": "Stationery",
+    "image": "https://images.unsplash.com/photo-1654542645651-5196f4931cd6?auto=format&fit=crop&w=800&q=80",
+    "alt": "A softcover journal lying flat beside a cup of coffee"
+  },
+  {
+    "id": "noise-cancelling-headphones",
+    "name": "Noise-Cancelling Headphones",
+    "description": {
+      "marketing": "Immersive studio-grade sound that cocoons you in pure, uninterrupted focus.",
+      "honest": "Because people are exhausting."
+    },
+    "price": 199.95,
+    "category": "Audio",
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+    "alt": "Over-ear headphones resting on a flat surface"
+  },
+  {
+    "id": "premium-socks",
+    "name": "Premium Socks",
+    "description": {
+      "marketing": "Artisanal knitwear for the feet, engineered for all-day luxury and effortless style.",
+      "honest": "They're socks. We added a logo."
+    },
+    "price": 24.95,
+    "category": "Apparel",
+    "image": "https://images.unsplash.com/photo-1586350977771-b3b0abd50c82?auto=format&fit=crop&w=800&q=80",
+    "alt": "A neatly folded pair of knitted socks"
+  },
+  {
+    "id": "meditation-cushion",
+    "name": "Meditation Cushion",
+    "description": {
+      "marketing": "A sanctuary for stillness, handcrafted to deepen your mindfulness practice.",
+      "honest": "Sit down and discover 47 new things to worry about."
+    },
+    "price": 44.95,
+    "category": "Wellness",
+    "image": "https://images.unsplash.com/photo-1781255575628-d645cc39160f?auto=format&fit=crop&w=800&q=80",
+    "alt": "A round meditation cushion placed on a wooden floor"
+  },
+  {
+    "id": "ergonomic-office-chair",
+    "name": "Ergonomic Office Chair",
+    "description": {
+      "marketing": "Ergonomic excellence meticulously tuned to support your most ambitious workday.",
+      "honest": "For sitting through meetings that could've been emails."
+    },
+    "price": 499.95,
+    "category": "Furniture",
+    "image": "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?auto=format&fit=crop&w=800&q=80",
+    "alt": "A modern ergonomic office chair against a plain background"
+  },
+  {
+    "id": "premium-usb-cable",
+    "name": "The Premium\u2122 USB Cable",
+    "description": {
+      "marketing": "A USB cable that transfers data, delivers power, and meets the bare minimum requirements of being a cable. Wrapped in premium materials and priced to suggest it has a personal relationship with your devices.",
+      "honest": "It's a cable. It connects things. You probably already own three."
+    },
+    "price": 39.99,
+    "category": "Tech",
+    "image": "https://images.unsplash.com/photo-1492107376256-4026437926cd?auto=format&fit=crop&w=800&q=80",
+    "alt": "A coiled USB cable on a neutral background"
+  }
+]

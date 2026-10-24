@@ -1,0 +1,16 @@
+.image,
+.fallback {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  background: var(--color-surface-muted);
+}
+
+.fallback {
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}

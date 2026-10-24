@@ -1,0 +1,8 @@
+dist
+node_modules
+package-lock.json
+
+# User-authored docs and task briefs — leave formatting as written
+AGENTS.md
+tasks/
+.kiro/
